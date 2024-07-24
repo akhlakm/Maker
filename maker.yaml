@@ -1,0 +1,38 @@
+env: |
+  export PATH=$PATH:~/go/bin
+  export GOPATH=~/gopath
+
+install:
+  # prepare for running
+
+run:
+  - exe: |
+      ## Run the maker executable on the current project
+      go run maker.go
+
+setup:
+  # Install development libraries.
+  - golang: |
+      ## Install golang in the user home directory.
+      if command -v go; then
+        return 0;
+      fi
+      wget https://go.dev/dl/go1.22.5.linux-amd64.tar.gz -o golang.tar.gz
+      tar -C ~/ -xzf golang.tar.gz
+
+add:
+  # Add new items.
+
+build:
+  # Build the updated items.
+  - exe: |
+      ## build the executable
+      go build maker.go
+
+deploy:
+  # Publish or sync the changes.
+  - exe: |
+      ## install the executable
+      mkdir -p ~/.local/bin
+      cp ./maker ~/.local/bin
+      echo "Installed in ~/.local/bin, Make sure it is in PATH"

@@ -1,0 +1,33 @@
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+name: Create Release
+
+jobs:
+  build:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Go environment
+        uses: actions/setup-go@v5.0.2
+
+      - name: Go run
+        run: go run maker.go
+
+      - name: Go build
+        run: go build maker.go
+
+      - name: Upload to Release Action
+        uses: Shopify/upload-to-release@v2.0.0
+        with:
+          # Artifact name
+          name: maker
+          path: ./maker
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+                  

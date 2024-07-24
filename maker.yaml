@@ -4,11 +4,14 @@ env: |
   export GOPATH=~/gopath
 
 install:
-  # prepare for running
+  - latest: |
+      ## Download the latest binary.
+      wget https://github.com/akhlakm/Maker/releases/latest/download/maker
+      chmod +x maker
 
 run:
   - exe: |
-      ## Run the maker executable on the current project
+      ## Run the maker executable on the current project.
       go run maker.go
 
 setup:

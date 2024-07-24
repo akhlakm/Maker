@@ -28,11 +28,29 @@ build:
   - exe: |
       ## build the executable
       go build maker.go
+      echo "Build OK"
 
 deploy:
   # Publish or sync the changes.
-  - exe: |
+  - install: |
       ## install the executable
       mkdir -p ~/.local/bin
       cp ./maker ~/.local/bin
-      echo "Installed in ~/.local/bin, Make sure it is in PATH"
+      echo "Installed in ~/.local/bin, make sure it is in PATH"
+
+  - release: |
+      ## Create a new github release
+      last_tag=$(git tag -l "ap-*" | tail -n 1)
+      echo $last_tag
+
+      # Increase release version.
+      VERSION=$(python -c "v='${last_tag#*v}'.split('.');print('%s.%s.%d' %(v[0], v[1], int(v[2])+1))")
+      echo "   >>>"
+
+      # New tag name.
+      TAGNAME="v$VERSION"
+      echo $TAGNAME
+
+      # Add tag and push to origin.
+      git tag $TAGNAME && git push origin $TAGNAME
+      

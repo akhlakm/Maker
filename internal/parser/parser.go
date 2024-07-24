@@ -105,7 +105,7 @@ func buildFunctions(block string, flist []Func) string {
     contents := ""
     for _, fitem := range flist {
         for name, body := range fitem {
-            funcname := fmt.Sprintf("%s_%s", block, name)
+            funcname := fmt.Sprintf("%s-%s", block, name)
             function := fmt.Sprintf("function %s () {\n%s\nreturn 0\n}", funcname, body)
             contents += "\n\n" + function
         }
@@ -129,7 +129,7 @@ func saveMakeScript(filename string, entry string) {
 }
 
 func RunFunction(scriptpath string, block string, funcname string) {
-    entry := fmt.Sprintf("%s_%s", block, funcname)
+    entry := fmt.Sprintf("%s-%s", block, funcname)
     saveMakeScript(scriptpath, entry)
 
     args := []string{scriptpath}

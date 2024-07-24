@@ -1,4 +1,5 @@
 env: |
+  set -e
   export PATH=$PATH:~/go/bin
   export GOPATH=~/gopath
 
@@ -40,7 +41,7 @@ deploy:
 
   - release: |
       ## Create a new github release
-      last_tag=$(git tag -l "ap-*" | tail -n 1)
+      last_tag=$(git tag -l "v*" | tail -n 1)
       echo $last_tag
 
       # Increase release version.
@@ -48,9 +49,9 @@ deploy:
       echo "   >>>"
 
       # New tag name.
-      TAGNAME="v$VERSION"
-      echo $TAGNAME
+      newtag="v$VERSION"
+      echo $newtag
 
       # Add tag and push to origin.
-      git tag $TAGNAME && git push origin $TAGNAME
+      git tag $newtag && git push origin $newtag
       

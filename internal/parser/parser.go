@@ -160,9 +160,11 @@ func saveMakeScript(filename string, entry string) {
 }
 
 func RunFunction(scriptpath string, block string, funcname string) {
-	entry := fmt.Sprintf("%s-%s", block, funcname)
+	// call format: block-function "$@"
+	entry := fmt.Sprintf("%s-%s \"$@\"", block, funcname)
 	saveMakeScript(scriptpath, entry)
 
+	// remove the calling arguments, pass the next ones to the script
 	args := []string{scriptpath}
 	args = append(args, os.Args[3:]...)
 

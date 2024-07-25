@@ -37,6 +37,10 @@ test:
       ## Test maker using go run
       go run maker.go
 
+  - args: |
+      ## Pass some arguments to test here
+      echo "Arguments received: $@"
+
 deploy:
   # Publish or sync the changes.
   - install: |

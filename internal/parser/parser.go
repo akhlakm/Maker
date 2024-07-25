@@ -42,29 +42,52 @@ func LoadYAML(filename string) {
 	}
 }
 
+func functionNames(flist []Func) string {
+	namelist := ""
+	for _, fitem := range flist {
+		for name := range fitem {
+			if len(namelist) > 0 {
+				namelist += ", " + name
+			} else {
+				namelist = name
+			}
+		}
+	}
+	return namelist
+}
+
 func ListBlocks() {
-	logger.Print("Available commands:")
+	logger.Print("Available block - commands:\n")
 	if len(Defn.Install) > 0 {
-		logger.Print("  install   -   Install the application.")
+		logger.Print(
+			fmt.Sprintf("  install   -   %s", functionNames(Defn.Install)))
 	}
 	if len(Defn.Run) > 0 {
-		logger.Print("  run       -   Run the prepared application.")
+		logger.Print(
+			fmt.Sprintf("  run       -   %s", functionNames(Defn.Run)))
 	}
 	if len(Defn.Setup) > 0 {
-		logger.Print("  setup     -   Prepare the development environment.")
+		logger.Print(
+			fmt.Sprintf("  setup     -   %s", functionNames(Defn.Setup)))
 	}
 	if len(Defn.Add) > 0 {
-		logger.Print("  add       -   Add new items to application.")
+		logger.Print(
+			fmt.Sprintf("  add       -   %s", functionNames(Defn.Add)))
 	}
 	if len(Defn.Build) > 0 {
-		logger.Print("  build     -   Build the application.")
+		logger.Print(
+			fmt.Sprintf("  build     -   %s", functionNames(Defn.Build)))
 	}
 	if len(Defn.Test) > 0 {
-		logger.Print("  test      -   Test the application.")
+		logger.Print(
+			fmt.Sprintf("  test      -   %s", functionNames(Defn.Test)))
 	}
 	if len(Defn.Deploy) > 0 {
-		logger.Print("  deploy    -   Push or deploy the application.")
+		logger.Print(
+			fmt.Sprintf("  deploy    -   %s", functionNames(Defn.Deploy)))
 	}
+
+	logger.Print("\nPass a block name to see more details.")
 }
 
 func printFunctions(block string, flist []Func) {
@@ -81,6 +104,8 @@ func printFunctions(block string, flist []Func) {
 			logger.Print(fmt.Sprintf("\n  %s - %s", name, summary))
 		}
 	}
+
+	logger.Print(fmt.Sprintf("\nPass %s <command> to execute it.", block))
 }
 
 func ListFunctions(block string) {

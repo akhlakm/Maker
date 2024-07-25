@@ -47,6 +47,5 @@ func main() {
 	}
 
 	parser.LoadYAML(makeFile)
-
-	logger.Print(".")
+	logger.Print("~")
 }

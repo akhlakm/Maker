@@ -4,18 +4,15 @@ env: |
   export GOPATH=~/gopath
 
 install:
-  - latest: |
-      ## Download the latest binary.
-      wget https://github.com/akhlakm/Maker/releases/latest/download/maker
-      chmod +x maker
+  # Setup runtime environment.
 
 run:
-  - exe: |
+  - maker: |
       ## Run the maker executable from cwd.
       ./maker
 
 setup:
-  # Install development libraries.
+  # Setup development environment.
   - golang: |
       ## Install golang in the user home directory.
       if command -v go; then
@@ -29,12 +26,13 @@ add:
 
 build:
   # Build the updated items.
-  - exe: |
+  - maker: |
       ## build the executable
       go build maker.go
       echo "Build OK"
 
 test:
+  # Run tests.
   - maker: |
       ## Test maker using go run
       go run maker.go

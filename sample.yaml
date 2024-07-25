@@ -1,4 +1,4 @@
-## To use this file, download maker:
+## To use this file, download and install maker:
 ##    wget https://github.com/akhlakm/Maker/releases/latest/download/maker
 ##    chmod +x maker && cp -f maker /usr/bin
 
@@ -9,6 +9,8 @@ env: |
   source ~/miniconda3/etc/profile.d/conda.sh && conda activate $CONDAENV || true
 
 install:
+  # Setup runtime environment.
+
   - conda: |
       ## Create new conda env.
       if ! conda activate $CONDAENV; then
@@ -22,11 +24,13 @@ install:
       git pull
 
 run:
+  # Run the application.
   - app: |
       ## Run the maker executable on the current project.
       maker init
 
 setup:
+  # Setup development environment.
   - dev: |
       ## Install development requirements.
       pip install pytest
@@ -36,11 +40,13 @@ add:
 
 
 build:
+  # Build the application.
   - docker: |
       ## Build docker container
       docker compose build
 
 test:
+  # Run tests.
   - all: |
       ## Run pytest
       pytest -s

@@ -1,0 +1,69 @@
+## To use this file, download maker:
+##    wget https://github.com/akhlakm/Maker/releases/latest/download/maker
+##    chmod +x maker && cp -f maker /usr/bin
+
+env: |
+  ## Common items, will always run at the start.
+  set -e
+  CONDAENV=base
+  source ~/miniconda3/etc/profile.d/conda.sh && conda activate $CONDAENV || true
+
+install:
+  - conda: |
+      ## Create new conda env.
+      if ! conda activate $CONDAENV; then
+          conda create -n $CONDAENV python=3.11
+          conda activate $CONDAENV
+          pip install -r requirements.txt
+      fi
+
+  - latest: |
+      ## Download the latest version.
+      git pull
+
+run:
+  - app: |
+      ## Run the maker executable on the current project.
+      maker init
+
+setup:
+  - dev: |
+      ## Install development requirements.
+      pip install pytest
+
+add:
+  # Add new items.
+
+
+build:
+  - docker: |
+      ## Build docker container
+      docker compose build
+
+test:
+  - all: |
+      ## Run pytest
+      pytest -s
+
+deploy:
+  # Publish or sync the changes.
+  - sync: |
+      ## Rsync to remote.
+      rsync -avrRh --info=progress2 --stats ./ remotehost:/home/$USER
+
+  - tag: |
+      ## Create a new github tag and push to origin.
+
+      last_tag=$(git tag -l "v*" | tail -n 1)
+      echo $last_tag
+
+      # Increase the release version number.
+      VERSION=$(python -c "v='${last_tag#*v}'.split('.');print('%s.%s.%d' %(v[0], v[1], int(v[2])+1))")
+      echo "   >>>"
+
+      # New tag name.
+      newtag="v$VERSION"
+      echo $newtag
+
+      # Add tag and push to origin.
+      git tag $newtag && git push origin $newtag

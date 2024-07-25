@@ -11,8 +11,8 @@ install:
 
 run:
   - exe: |
-      ## Run the maker executable on the current project.
-      go run maker.go
+      ## Run the maker executable from cwd.
+      ./maker
 
 setup:
   # Install development libraries.
@@ -33,6 +33,11 @@ build:
       ## build the executable
       go build maker.go
       echo "Build OK"
+
+test:
+  - maker: |
+      ## Test maker using go run
+      go run maker.go
 
 deploy:
   # Publish or sync the changes.

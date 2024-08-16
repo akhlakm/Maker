@@ -25,21 +25,29 @@ var Defn struct {
 	Deploy  []Func
 }
 
-func LoadYAML(filename string) {
-	logger.Trace("Load-YAML", filename)
-	if fileio.FileExists(filename) {
-		contents, err := os.ReadFile(filename)
-		if err != nil {
-			log.Fatal(err)
-		}
+func LoadMakerYaml(filenames []string) bool {
+	// Loop over the maker.yaml files and load them if any exists.
+	// Returns true if a file was found, false otherwise.
 
-		if err := yaml.Unmarshal(contents, &Defn); err != nil {
-			logger.Error("Load-YAML", filename, "Failed to read YAML file.")
-		}
+	for _, filename := range filenames {
+		if fileio.FileExists((filename)) {
+			contents, err := os.ReadFile(filename)
+			if err != nil {
+				log.Fatal(err)
+			}
 
-		logger.Done("Load-YAML", filename)
-		// fmt.Printf("%+v\n", Defn)
+			if err := yaml.Unmarshal(contents, &Defn); err != nil {
+				logger.Error("Load-YAML", filename, "Failed to read YAML file.")
+			}
+
+			logger.Done("Load-YAML", filename)
+			// fmt.Printf("%+v\n", Defn)
+
+			return true
+		}
 	}
+
+	return false
 }
 
 func functionNames(flist []Func) string {

@@ -9,18 +9,17 @@ import (
 	"os"
 )
 
-var makeFile string = "maker.yaml"
 var makeScript string = "/tmp/maker.sh"
+var makeFiles = []string{"maker.yml", "maker.yaml"}
 
-//go:embed sample.yaml
+//go:embed sample.yml
 var sample []byte
 
 func main() {
 	logger.Trace("main", "")
 
-	if fileio.FileExists(makeFile) {
+	if parser.LoadMakerYaml(makeFiles) {
 		// makeFile found
-		parser.LoadYAML(makeFile)
 
 		if len(os.Args) == 1 {
 			parser.ListBlocks()
@@ -36,6 +35,9 @@ func main() {
 	} else {
 		// no makeFile
 
+		// default file name for init
+		makeFile := makeFiles[0]
+
 		if len(os.Args) == 2 && os.Args[1] == "init" {
 			// write the sample as make file
 			fileio.WriteFile(makeFile, sample)
@@ -46,6 +48,5 @@ func main() {
 		}
 	}
 
-	parser.LoadYAML(makeFile)
 	logger.Print("~")
 }

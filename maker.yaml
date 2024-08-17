@@ -83,4 +83,4 @@ deploy:
 
       # Add tag and push to origin.
       git tag $newtag && git push origin $newtag
-      
+      git push

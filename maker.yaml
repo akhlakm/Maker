@@ -41,15 +41,34 @@ test:
       ## Pass some arguments to test here
       echo "Arguments received: $@"
 
+  - python: |
+      ## Test python interactive shell
+      python
+
 deploy:
   # Publish or sync the changes.
+  - prepare: |
+      ## Prepare for deployment and perform sanity checks.
+
+      # make sure there is nothing to commit.
+      [[ -z "$(git status -s)" ]] || { echo "Please commit changes and merge to the main branch first."; exit 3; }
+
+      # make sure we are on the main git branch.
+      [[ "$(git rev-parse --abbrev-ref HEAD)" == "main" ]] || { echo "Please merge to the main git branch first."; exit 4; }
+
+      # build the maker executable
+      (build-maker)
+
   - install: |
-      ## install the executable
+      ## Install maker executable to .local/bin
+      deploy-prepare
       mkdir -p ~/.local/bin
       cp ./maker ~/.local/bin
       echo "Installed in ~/.local/bin, make sure it is in PATH"
 
   - release: |
+      deploy-prepare
+
       ## Create a new github release
       last_tag=$(git tag -l "v*" | tail -n 1)
       echo $last_tag

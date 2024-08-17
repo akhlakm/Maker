@@ -9,6 +9,7 @@ func Execute(exe string, args []string, cwd string) (bool, error) {
 	cmd := exec.Command(exe, args...)
     cmd.Stdout = os.Stdout
     cmd.Stderr = os.Stderr
+    cmd.Stdin = os.Stdin
 	cmd.Dir = cwd
 
     err := cmd.Run()

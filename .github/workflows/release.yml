@@ -1,4 +1,5 @@
 on:
+  workflow_dispatch: # Allow manually triggering the workflow
   push:
     # Sequence of patterns matched against refs/tags
     tags:

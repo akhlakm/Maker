@@ -85,7 +85,7 @@ deploy:
       echo $last_tag
 
       # Increase release version.
-      VERSION=$(python -c "v='${last_tag#*v}'.split('.');print('%s.%s.%d' %(v[0], v[1], int(v[2])+1))")
+      VERSION=$(python -c "v='${last_tag#*v}'.split('.');print('%s.%s.%02d' %(v[0], v[1], int(v[2])+1))")
       echo "   >>>"
 
       # New tag name.

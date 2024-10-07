@@ -12,7 +12,9 @@ func Execute(exe string, args []string, cwd string) (bool, error) {
     cmd.Stdin = os.Stdin
 	cmd.Dir = cwd
 
-    err := cmd.Run()
+    // Start the command, will not wait for it to finish.
+    err := cmd.Start()
+
     if err != nil {
         return false, err
     }

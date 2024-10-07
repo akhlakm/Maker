@@ -29,7 +29,13 @@ build:
   - maker: |
       ## build the executable
       go build maker.go
-      echo "Build OK"
+      echo "Build OK - maker"
+
+  - auto: |
+      ## build the executable
+      go build auto.go
+      echo "Build OK - auto"
+
 
 test:
   # Run tests.
@@ -56,14 +62,19 @@ deploy:
       # make sure we are on the main git branch.
       [[ "$(git rev-parse --abbrev-ref HEAD)" == "main" ]] || { echo "Please merge to the main git branch first."; exit 4; }
 
+  - install: |
+      ## Install maker and auto executable to .local/bin
+
       # build the maker executable
       (build-maker)
 
-  - install: |
-      ## Install maker executable to .local/bin
-      deploy-prepare
+      # build the auto executable
+      (build-auto)
+
       mkdir -p ~/.local/bin
       cp ./maker ~/.local/bin
+      cp ./auto ~/.local/bin
+
       echo "Installed in ~/.local/bin, make sure it is in PATH"
 
   - release: |

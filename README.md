@@ -27,4 +27,7 @@ chmod +x auto
 
 ## Install or add to PATH
 sudo mv auto /usr/bin/
+
+## Set the path to AUTODIR in your bashrc or shell
+export AUTODIR=/home/$USER/autoscripts
 ```

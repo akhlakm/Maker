@@ -29,6 +29,10 @@ func get_script_dir() string {
 	if err != nil {
 		logger.Error("auto", "", "Failed to get absolute path of script directory")
 	}
+
+	// Set the AUTODIR environment variable.
+	os.Setenv("AUTODIR", abs_script_dir)
+
 	return abs_script_dir
 }
 
@@ -44,7 +48,6 @@ func run_script(scriptPath string, args []string) {
 		logger.Error("auto", scriptPath, fmt.Sprintf("Failed: %s", err))
 	}
 }
-
 
 func main() {
 	logger.Trace("auto", "")

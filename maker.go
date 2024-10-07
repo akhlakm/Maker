@@ -10,7 +10,10 @@ import (
 )
 
 var makeScript string = "/tmp/maker.sh"
-var makeFiles = []string{"maker.yml", "maker.yaml"}
+
+// List of possible maker file names
+// Order of preference is maintained
+var makeFiles = []string{"maker.yaml", "maker.yml"}
 
 //go:embed sample.yml
 var sample []byte
@@ -25,8 +28,12 @@ func main() {
 			parser.ListBlocks()
 
 		} else if len(os.Args) == 2 {
-			// List functions of the block
-			parser.ListFunctions(os.Args[1])
+			if os.Args[1] == "export" {
+				parser.ExportMakerfile("maker.sh")
+			} else {
+				// List functions of the block
+				parser.ListFunctions(os.Args[1])
+			}
 		} else {
 			// call the block function
 			parser.RunFunction(makeScript, os.Args[1], os.Args[2])

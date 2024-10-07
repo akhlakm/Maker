@@ -95,6 +95,9 @@ func ListBlocks() {
 			fmt.Sprintf("  deploy    -   %s", functionNames(Defn.Deploy)))
 	}
 
+	logger.Print(
+		fmt.Sprintf("  export    -   export maker.sh"))
+
 	logger.Print("\nPass a block name to see more details.")
 }
 
@@ -144,7 +147,15 @@ func buildFunctions(block string, flist []Func) string {
 	for _, fitem := range flist {
 		for name, body := range fitem {
 			funcname := fmt.Sprintf("%s-%s", block, name)
-			function := fmt.Sprintf("function %s () {\n%s\nreturn 0\n}", funcname, body)
+			lines := strings.Split(body, "\n")
+			// add tab to each line
+			for i, line := range lines {
+				lines[i] = "    " + line
+			}
+			// join the lines
+			body = strings.Join(lines, "\n")
+			// add the function
+			function := fmt.Sprintf("function %s () {\n%sreturn 0\n}", funcname, body)
 			contents += "\n\n" + function
 		}
 	}
@@ -154,7 +165,7 @@ func buildFunctions(block string, flist []Func) string {
 
 func saveMakeScript(filename string, entry string) {
 	contents := "#!/bin/bash"
-	contents += "\n\n" + Defn.Env + "\n"
+	contents += "\n\n" + Defn.Env
 	contents += buildFunctions("install", Defn.Install)
 	contents += buildFunctions("run", Defn.Run)
 	contents += buildFunctions("setup", Defn.Setup)
@@ -163,7 +174,7 @@ func saveMakeScript(filename string, entry string) {
 	contents += buildFunctions("test", Defn.Test)
 	contents += buildFunctions("deploy", Defn.Deploy)
 
-	contents += "\n\n" + entry + "\n"
+	contents += "\n\n" + entry
 	fileio.WriteFile(filename, []byte(contents))
 }
 
@@ -181,4 +192,9 @@ func RunFunction(scriptpath string, block string, funcname string) {
 	if !ok {
 		logger.Error("Run-Function", entry, fmt.Sprintf("Failed: %s", err))
 	}
+}
+
+func ExportMakerfile(scriptpath string) {
+	// save the makefile when export is called
+	saveMakeScript(scriptpath, "\"$@\"")
 }
